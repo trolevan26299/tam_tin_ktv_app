@@ -8,7 +8,7 @@ import Link from "next/link";
 const Dashboard = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
-  console.log("data", session);
+
   useEffect(() => {
     if (status === "unauthenticated") {
       router.replace("/login");
