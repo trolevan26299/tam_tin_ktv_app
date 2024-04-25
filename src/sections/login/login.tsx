@@ -17,7 +17,7 @@ export default function Login() {
 
   useEffect(() => {
     if (sessionStatus === "authenticated") {
-      router.replace("/dashboard");
+      router.replace("/");
     }
   }, [sessionStatus, router]);
 
@@ -44,7 +44,7 @@ export default function Login() {
 
     if (res?.error) {
       setError("Invalid email or password");
-      if (res?.url) router.push("/dashboard");
+      if (res?.url) router.push("/");
     } else {
       setError("");
     }

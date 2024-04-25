@@ -1,9 +1,40 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import React, { useEffect } from "react";
+import { useSession, signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { MenubarComponent } from "@/components/menu-bar/menu-bar";
+
+const Home = () => {
+  const router = useRouter();
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.replace("/login");
+    }
+  }, [status, router]);
+
+  const handleLogout = async () => {
+    await signOut({ redirect: false });
+    router.replace("/login");
+  };
+
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h1>Home Page</h1>
-    </main>
+    <div className=" text-white">
+      <h1>Dashboard</h1>
+
+      <button onClick={handleLogout} className="p-2 px-5  bg-blue-800 rounded-full">
+        Logout
+      </button>
+
+      <MenubarComponent />
+    </div>
   );
-}
+};
+
+export default Home;
