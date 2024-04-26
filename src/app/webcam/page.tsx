@@ -12,32 +12,42 @@ const DynamicQrScanner = dynamic(
 );
 
 export default function QRscanner() {
-  const [stop, setStop] = useState<boolean>(true);
-  const [title, setTitle] = useState<any>(undefined);
+  const [state, setState] = useState<{
+    stop: boolean;
+    title: string;
+  }>({
+    stop: false,
+    title: "",
+  });
   return (
-    <div className='flex min-h-screen flex-col items-center text-black h-screen'>
-      {!title ? (
+    <div className='flex min-h-screen items-center text-black h-screen items-center justify-center flex-col'>
+      {!state.title ? (
         <DynamicQrScanner
-          containerStyle={{ height: "100%", width: "100%" }}
-          stopDecoding={stop}
+          containerStyle={{
+            height: "200px",
+            width: "100%",
+            marginBottom: "10px",
+          }}
+          stopDecoding={!state.stop}
           onDecode={(value) => {
             if (value) {
-              setTitle(value);
-              setStop((val) => !val);
+              setState({ ...state, title: value, stop: !state.stop });
             }
           }}
           onError={(error) => console.error(error.message)}
           audio={false}
         />
       ) : (
-        <span className='text-white'>{title}</span>
+        <span className='text-white'>{state.title}</span>
       )}
       <Button
-        className='p-2 px-5 -mt-1 rounded-full'
+        className='p-2 px-5 mt-5 rounded-full'
         variant='outline'
-        onClick={() => setStop((val) => !val)}
+        onClick={() => {
+          setState({ ...state, title: "", stop: !state.stop });
+        }}
       >
-        {stop ? "Start" : "Stop"}
+        {!state.stop ? "Start" : "Stop"}
       </Button>
     </div>
   );
