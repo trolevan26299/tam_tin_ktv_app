@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Icon } from "@iconify/react";
 
 const Dashboard = () => {
   const router = useRouter();
@@ -25,12 +26,27 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-between p-24 text-white">
-      <h1>Dashboard</h1>
+    <div className='flex min-h-screen flex-col items-center justify-between p-5 text-white'>
+      <div className='flex w-full justify-between'>
+        <h1>Dashboard</h1>
+        <button
+          onClick={handleLogout}
+          className='p-2 px-5 -mt-1 bg-blue-800 rounded-full'
+        >
+          Logout
+        </button>
+      </div>
 
-      <button onClick={handleLogout} className="p-2 px-5 -mt-1 bg-blue-800 rounded-full">
-        Logout
-      </button>
+      <div className='flex w-full h-10 text-center justify-center bg-white rounded-lg'>
+        <Link href='/webcam'>
+          <Icon
+            icon='material-symbols-light:qr-code-scanner'
+            color='black'
+            width='100%'
+            className='cursor-pointer'
+          />
+        </Link>
+      </div>
     </div>
   );
 };
