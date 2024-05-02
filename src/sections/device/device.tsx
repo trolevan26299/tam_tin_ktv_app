@@ -4,9 +4,12 @@ import { Button } from "@/components/ui/button";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 
-const DynamicQrScanner = dynamic(() => import("@yudiel/react-qr-scanner").then((mod) => mod.QrScanner), {
-  ssr: false,
-});
+const DynamicQrScanner = dynamic(
+  () => import("@yudiel/react-qr-scanner").then((mod) => mod.QrScanner),
+  {
+    ssr: false,
+  }
+);
 
 const Device = () => {
   const [state, setState] = useState<{
@@ -36,7 +39,7 @@ const Device = () => {
     }
   };
   return (
-    <div className="flex min-h-screen items-center text-black h-screen items-center justify-center flex-col">
+    <div className='flex min-h-screen items-center text-black h-screen items-center justify-center flex-col'>
       {!state.title ? (
         <DynamicQrScanner
           containerStyle={{
@@ -55,15 +58,15 @@ const Device = () => {
           audio={false}
         />
       ) : (
-        <span className="text-white">
+        <span className='text-white'>
           {state.title}
           {state.device.belong_to}
         </span>
       )}
 
       <Button
-        className="p-2 px-5 mt-5 rounded-full"
-        variant="outline"
+        className='p-2 px-5 mt-5 rounded-full'
+        variant='outline'
         onClick={() => {
           setState({ ...state, title: "", stop: !state.stop });
         }}

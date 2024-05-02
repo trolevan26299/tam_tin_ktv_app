@@ -22,7 +22,10 @@ const authOptions: AuthOptions = {
         try {
           const user = await UserModel.findOne({ email: credentials.email });
           if (user) {
-            const isPasswordCorrect = await bcrypt.compare(credentials.password, user.password);
+            const isPasswordCorrect = await bcrypt.compare(
+              credentials.password,
+              user.password
+            );
             if (isPasswordCorrect) {
               return user;
             }
@@ -42,10 +45,19 @@ const authOptions: AuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    async signIn({ user, account }: { user: User | AdapterUser; account: Account | null }) {
+    async signIn({
+      user,
+      account,
+    }: {
+      user: User | AdapterUser;
+      account: Account | null;
+    }) {
       let isSignInSuccessful = false;
 
-      if (account?.provider === "credentials" || account?.provider === "google") {
+      if (
+        account?.provider === "credentials" ||
+        account?.provider === "google"
+      ) {
         await connect();
         try {
           const existingUser = await UserModel.findOne({ email: user.email });
