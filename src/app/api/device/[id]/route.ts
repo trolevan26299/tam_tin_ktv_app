@@ -1,4 +1,4 @@
-import DeviceModel from "@/models/Device";
+import DeviceModel from "@/lib/models/Device";
 import connect from "@/utils/db";
 import { NextResponse } from "next/server";
 
