@@ -4,9 +4,9 @@ import { SessionModel } from '@/lib/models/Session';
 import { UserModel } from '@/lib/models/User';
 import { ObjectId } from 'mongodb';
 
-const uri = process.env.MONGODB_URI as string;
-
 export async function GET(request: Request) {
+
+  console.log("có vào đây", request);                   
   const authToken = request.headers.get('Authorization')?.replace('Bearer ', '');
 
   if (!authToken) {

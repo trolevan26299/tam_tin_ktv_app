@@ -16,7 +16,7 @@ export async function middleware(request: NextRequest) {
   }
 
   try {
-    const verifyResponse = await fetch(`${request.nextUrl.origin}/api/verify`, {
+    const verifyResponse = await fetch(`${request.nextUrl.origin}/api/auth/verify`, {
         headers: {
           'Authorization': `Bearer ${authToken}`
         }

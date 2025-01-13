@@ -17,13 +17,19 @@ export const ScanPage = () => {
   const router = useRouter();
   const { toast } = useToast();
   const [scanning, setScanning] = useState(true);
+  const [stopDecoding, setStopDecoding] = useState(false);
   const [deviceHistory, setDeviceHistory] = useState<Device | null>(null);
 
   const handleDecode = async (result: string) => {
     console.log("result", result);
     setScanning(false);
     try {
-      const response = await axios.get(`/api/device/${result}`);
+      const authToken = localStorage.getItem('authToken');
+      const response = await axios.get(`/api/device/${result}`,{
+        headers: {
+          'Authorization': `Bearer ${authToken}`
+        }
+      });
       console.log("response", response.data);
       if (response.data) {
         setDeviceHistory(response.data);
@@ -76,9 +82,11 @@ export const ScanPage = () => {
               {scanning && (
                 <DynamicQrScanner
                   audio={false}
+                  stopDecoding={stopDecoding}
                   onDecode={async (value) => {
                     if (value) {
                        handleDecode(value);
+                       setStopDecoding(true);
                     }
                   }}
                   onError={handleError}

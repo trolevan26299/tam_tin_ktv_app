@@ -1,50 +1,47 @@
 import { NextResponse } from 'next/server';
-import crypto from 'crypto';
-import dbConnect from '@/lib/mongodb';
-import { UserModel } from '@/lib/models/User';
-import { SessionModel } from '@/lib/models/Session';
+import type { NextRequest } from 'next/server';
+import { MongoClient, ObjectId } from 'mongodb';
 
 
+const uri = process.env.MONGODB_URI as string;
+export async function middleware(request: NextRequest) {
+  if (request.nextUrl.pathname.startsWith('/api/auth/')) {
+    return NextResponse.next();
+  }
 
-export async function POST(req: Request) {
+  const authToken = request.headers.get('Authorization')?.replace('Bearer ', '');
+
+  if (!authToken) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
-    await dbConnect();
-    const { telegramUserId, telegramUsername } = await req.json();
-    
-    const user = await UserModel.findOne({
-      username_telegram: telegramUsername,
-      user_id_telegram: telegramUserId,
-      status: "active"
-    });
-
-    if (!user) {
-      return NextResponse.json({ 
-        authorized: false,
-        message: 'Không có quyền truy cập'
-      }, { status: 403 });
-    }
-
-    const authToken = crypto.randomBytes(32).toString('hex');
-    
-    await SessionModel.create({
-      token: authToken,
-      userId: user._id,
-      expires: new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours
-    });
-
-    return NextResponse.json({
-      authorized: true,
-      authToken,
-      user: {
-        id: user._id,
-        name: user.name,
-        username: user.username_telegram,
+    const verifyResponse = await fetch(`${request.nextUrl.origin}/api/verify`, {
+        headers: {
+          'Authorization': `Bearer ${authToken}`
+        }
+      });
+  
+      if (!verifyResponse.ok) {
+        return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
       }
-    });
+  
+      const { userId } = await verifyResponse.json();
+      
+      const requestHeaders = new Headers(request.headers);
+      requestHeaders.set('x-user-id', userId);
+  
+      return NextResponse.next({
+        request: {
+          headers: requestHeaders,
+        },
+      });
   } catch (error) {
-    console.error('Auth error:', error);
-    return NextResponse.json({ 
-      error: 'Internal Server Error' 
-    }, { status: 500 });
+    console.error('Middleware error:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
+
+export const config = {
+  matcher: '/api/:path*',
+};
