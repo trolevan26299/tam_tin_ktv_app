@@ -76,11 +76,19 @@ export const ScanPage = () => {
               {scanning && (
                 <DynamicQrScanner
                   audio={false}
-                  onDecode={handleDecode}
+                  onDecode={async (value) => {
+                    if (value) {
+                       handleDecode(value);
+                    }
+                  }}
                   onError={handleError}
                   constraints={{ // Thêm cấu hình này
                     facingMode: "environment"
                   }}
+                 
+                  viewFinder={() => (
+                    <div className="border-2 border-red-500 absolute top-0 left-0 w-full h-full" />
+                  )}
                   containerStyle={{ borderRadius: "0.5rem", height: "100%" }}
                   videoStyle={{
                     borderRadius: "0.5rem",
