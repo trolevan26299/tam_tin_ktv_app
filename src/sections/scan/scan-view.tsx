@@ -54,6 +54,7 @@ export const ScanPage = () => {
   };
 
   const handleScanAgain = () => {
+    setStopDecoding(false);
     setDeviceHistory(null);
     setScanning(true);
   };
