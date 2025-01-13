@@ -121,7 +121,7 @@ export const ScanPage = () => {
         ) : (
           <Card className="p-6 bg-white/80 backdrop-blur-sm shadow-xl border-0 animate-fade-in">
            
-            <div className="space-y-6 max-h-[60vh] overflow-y-auto pr-2">
+            <div className="space-y-6 max-h-[75vh] overflow-y-auto pr-2">
               {/* Thông tin cơ bản */}
               <div className="grid gap-3">
                 <div className="flex  gap-1">
