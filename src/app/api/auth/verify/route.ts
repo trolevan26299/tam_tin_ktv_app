@@ -6,7 +6,7 @@ import { ObjectId } from 'mongodb';
 
 export async function GET(request: Request) {
 
-  console.log("có vào đây", request);                   
+                
   const authToken = request.headers.get('Authorization')?.replace('Bearer ', '');
 
   if (!authToken) {

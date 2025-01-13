@@ -21,7 +21,7 @@ export const ScanPage = () => {
   const [deviceHistory, setDeviceHistory] = useState<Device | null>(null);
 
   const handleDecode = async (result: string) => {
-    console.log("result", result);
+
     setScanning(false);
     try {
       const authToken = localStorage.getItem('authToken');
@@ -120,20 +120,20 @@ export const ScanPage = () => {
           </div>
         ) : (
           <Card className="p-6 bg-white/80 backdrop-blur-sm shadow-xl border-0 animate-fade-in">
-            <h2 className="text-xl font-semibold mb-4">Thông tin thiết bị</h2>
+           
             <div className="space-y-6 max-h-[60vh] overflow-y-auto pr-2">
               {/* Thông tin cơ bản */}
               <div className="grid gap-3">
-                <div className="flex items-center gap-2">
-                  <span className="font-medium min-w-32">Tên thiết bị:</span>
+                <div className="flex  gap-1">
+                  <span className="font-medium min-w-24">Tên thiết bị:</span>
                   <span>{deviceHistory.name}</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="font-medium min-w-32">Mã thiết bị:</span>
+                <div className="flex items-center gap-1">
+                  <span className="font-medium min-w-24">Mã thiết bị:</span>
                   <span>{deviceHistory.id_device}</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="font-medium min-w-32">Trạng thái:</span>
+                <div className="flex items-center gap-1">
+                  <span className="font-medium min-w-24">Trạng thái:</span>
                   <span className="px-2 py-1 rounded-full text-sm bg-green-100 text-green-800">
                     {deviceHistory.status}
                   </span>
