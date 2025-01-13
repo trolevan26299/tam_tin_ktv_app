@@ -61,15 +61,24 @@ export const ScanPage = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-2xl space-y-6">
+      <div className="w-full max-w-2xl space-y-6 relative">
+      <div className="absolute inset-0 bg-white/30 backdrop-blur-xl rounded-2xl shadow-2xl -z-10" />
         <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-            Quét mã QR thiết bị
-          </h1>
-          <p className="text-gray-400 mt-2">Đặt mã QR vào khung hình để quét</p>
+          {!deviceHistory ? (
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Quét mã QR thiết bị
+            </h1>
+          ) : (
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Thông tin thiết bị
+            </h1>
+          )}
+          {!deviceHistory && (
+            <p className="text-gray-600 mt-2 font-medium">Đặt mã QR vào khung hình để quét</p>
+          )}
         </div>
         {!deviceHistory ? (
-          <div className="relative aspect-square">
+          <div className="relative aspect-square bg-white/50 backdrop-blur-sm rounded-2xl p-4 shadow-lg">
             <div className="absolute inset-0 z-10 pointer-events-none">
               <div className="w-full h-full border-2 border-dashed border-blue-500 rounded-lg animate-pulse" />
               <div className="absolute top-0 left-0 w-16 h-16 border-t-4 border-l-4 border-blue-500 rounded-tl-lg" />
@@ -110,7 +119,7 @@ export const ScanPage = () => {
             </div>
           </div>
         ) : (
-          <Card className="p-6">
+          <Card className="p-6 bg-white/80 backdrop-blur-sm shadow-xl border-0 animate-fade-in">
             <h2 className="text-xl font-semibold mb-4">Thông tin thiết bị</h2>
             <div className="space-y-6 max-h-[60vh] overflow-y-auto pr-2">
               {/* Thông tin cơ bản */}
@@ -141,7 +150,7 @@ export const ScanPage = () => {
                     </span>
                     <span>{deviceHistory.type_customer}</span>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex  gap-2">
                     <span className="font-medium min-w-32">
                       Tên khách hàng:
                     </span>
