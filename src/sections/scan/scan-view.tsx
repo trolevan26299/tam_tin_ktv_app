@@ -30,7 +30,6 @@ export const ScanPage = () => {
           'Authorization': `Bearer ${authToken}`
         }
       });
-      console.log("response", response.data);
       if (response.data) {
         setDeviceHistory(response.data);
       }

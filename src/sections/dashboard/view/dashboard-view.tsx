@@ -11,8 +11,6 @@ export default function DashboardView() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
-    console.log("user", user);
-    console.log("loading", loading);
     useEffect(() => {
   
       const authenticateUser = async () => {
@@ -25,7 +23,6 @@ export default function DashboardView() {
                 'Authorization': `Bearer ${existingToken}`
               }
             });
-            console.log("validateResponse", validateResponse);
   
             if (validateResponse.ok) {
               const userData = JSON.parse(localStorage.getItem('userData') || '{}');
@@ -73,7 +70,6 @@ export default function DashboardView() {
             router.push('/403');
           }
         } catch (err) {
-          console.error('Authentication error:', err);
           setError('Đã có lỗi xảy ra trong quá trình xác thực');
         } finally {
           setLoading(false);
@@ -128,7 +124,7 @@ export default function DashboardView() {
               </Button>
               
               <Button 
-                onClick={() => router.push('/parts')}
+                onClick={() => router.push(`/history-linhkien?userId=${user.id}`)}
                 className="h-14 text-lg font-semibold bg-gradient-to-r from-indigo-500 to-indigo-700 hover:from-indigo-600 hover:to-indigo-800 transform hover:scale-105 transition-all duration-200 shadow-lg shadow-indigo-500/30"
               >
                 📦 Linh kiện đã ứng
