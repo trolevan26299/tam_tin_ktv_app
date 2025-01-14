@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { SplashScreen } from "@/components/loading-screen";
 import axios from "axios";
 
 export const HistoryLinhKienView = () => {
-  const searchParams = useSearchParams();
-  const userId = searchParams.get("userId");
+  const router = useRouter();
+  const [userId, setUserId] = useState<string | null>(null);
 
   const [linhKiens, setLinhKiens] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -28,7 +28,12 @@ export const HistoryLinhKienView = () => {
       setLoading(false);
     }
   };
-
+  useEffect(() => {
+    // Lấy userId từ URL bằng Web API
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get("userId");
+    setUserId(id);
+  }, []);
   useEffect(() => {
     if (userId) {
       fetchLinhKiens();
