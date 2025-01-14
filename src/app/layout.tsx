@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import MainLayout from "@/layouts/main.layout";
+import AddToHomeScreen from "@/sections/addToHomeScreen";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,6 +25,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body className={inter.className}>
       <script src="https://telegram.org/js/telegram-web-app.js"></script>
+          <AddToHomeScreen />
           <MainLayout>{children}</MainLayout>
       </body>
     </html>
