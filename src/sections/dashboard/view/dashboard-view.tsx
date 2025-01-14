@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { User } from '@/types/user.type';
-import { addToHomeScreen } from '@telegram-apps/sdk';
 import { SplashScreen } from '@/components/loading-screen';
 
 export default function DashboardView() {
@@ -43,9 +42,7 @@ export default function DashboardView() {
             id:1150203629,
             username:"Tro26299"
           };
-          if (addToHomeScreen.isAvailable()) {
-            addToHomeScreen();
-          }
+       
           if (!telegramUser) {
             setError('Không thể lấy thông tin Telegram. Vui lòng truy cập qua Telegram Web App');
             setLoading(false);
