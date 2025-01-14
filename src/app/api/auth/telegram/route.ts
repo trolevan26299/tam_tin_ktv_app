@@ -37,7 +37,8 @@ export async function POST(req: Request) {
       authToken,
       user: {
         id: user._id,
-        username: user.username,
+        name: user.name,
+        username: user.username_telegram,
       }
     });
   } catch (error) {

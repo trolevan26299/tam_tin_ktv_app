@@ -1,8 +1,8 @@
-import { DashboardView } from "@/sections/dashboard/view";
+import { ScanPage } from "@/sections/scan/scan-view";
 
 export const metadata = {
   title: "Tâm Tín APP ",
 };
 export default function Home() {
-  return <DashboardView />;
+  return <ScanPage />;
 }
