@@ -4,14 +4,14 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { useEffect } from "react";
-import { addToHomeScreen } from '@telegram-apps/sdk';
+import { addToHomeScreen } from '@telegram-apps/sdk-react';
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: "Tâm Tín - Chuyên cung cấp dịch vụ máy đếm tiền",
-  description: "Chuyên cung cấp dịch vụ máy đếm tiền và vật tư máy đếm tiền",
-};
+// export const metadata: Metadata = {
+//   title: "Tâm Tín - Chuyên cung cấp dịch vụ máy đếm tiền",
+//   description: "Chuyên cung cấp dịch vụ máy đếm tiền và vật tư máy đếm tiền",
+// };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
