@@ -56,35 +56,43 @@ export const HistoryLinhKienView = () => {
           {/* Table Container */}
           <div className="relative" style={{ height: "calc(100vh - 300px)" }}>
             <div className="absolute inset-0 overflow-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent">
-              <table className="min-w-full">
-                <thead>
-                  <tr className="border-b border-gray-700/50">
-                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
-                      Tên Linh Kiện
-                    </th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
-                      Số Lượng
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-700/50">
-                  {linhKiens.map((linhKien) => (
-                    <tr
-                      key={linhKien._id}
-                      className="hover:bg-white/5 transition-colors duration-200"
-                    >
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
-                        {linhKien.name_linh_kien}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
-                        <span className="px-3 py-1 rounded-full bg-blue-500/20 text-blue-300">
-                          {linhKien.total}
-                        </span>
-                      </td>
+              {linhKiens.length > 0 ? (
+                <table className="min-w-full">
+                  <thead>
+                    <tr className="border-b border-gray-700/50">
+                      <th className="px-6 py-4 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+                        Tên Linh Kiện
+                      </th>
+                      <th className="px-6 py-4 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">
+                        Số Lượng
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-gray-700/50">
+                    {linhKiens.map((linhKien) => (
+                      <tr
+                        key={linhKien._id}
+                        className="hover:bg-white/5 transition-colors duration-200"
+                      >
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
+                          {linhKien.name_linh_kien}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
+                          <span className="px-3 py-1 rounded-full bg-blue-500/20 text-blue-300">
+                            {linhKien.total}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <div className="flex items-center justify-center h-full">
+                  <p className="text-gray-300 text-lg">
+                    Bạn chưa ứng linh kiện nào
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>
