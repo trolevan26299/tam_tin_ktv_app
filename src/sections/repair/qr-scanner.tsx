@@ -3,9 +3,12 @@
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import dynamic from "next/dynamic";
 
-const DynamicQrScanner = dynamic(() => import("@yudiel/react-qr-scanner").then((mod) => mod.QrScanner), {
-  ssr: false,
-});
+const DynamicQrScanner = dynamic(
+  () => import("@yudiel/react-qr-scanner").then((mod) => mod.QrScanner),
+  {
+    ssr: false,
+  }
+);
 
 interface QrScannerProps {
   onResult: (result: string) => void;
@@ -35,7 +38,7 @@ export function QrScannerDialog({ onResult, onClose }: QrScannerProps) {
                 console.error(error);
               }}
               constraints={{
-                facingMode: "environment"
+                facingMode: "environment",
               }}
               containerStyle={{ borderRadius: "0.5rem", height: "100%" }}
               videoStyle={{

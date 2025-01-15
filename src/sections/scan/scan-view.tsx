@@ -9,9 +9,12 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Device } from "@/types/device.type";
 import dynamic from "next/dynamic";
-const DynamicQrScanner = dynamic(() => import("@yudiel/react-qr-scanner").then((mod) => mod.QrScanner), {
-  ssr: false,
-});
+const DynamicQrScanner = dynamic(
+  () => import("@yudiel/react-qr-scanner").then((mod) => mod.QrScanner),
+  {
+    ssr: false,
+  }
+);
 
 export const ScanPage = () => {
   const router = useRouter();
@@ -21,14 +24,13 @@ export const ScanPage = () => {
   const [deviceHistory, setDeviceHistory] = useState<Device | null>(null);
 
   const handleDecode = async (result: string) => {
-
     setScanning(false);
     try {
-      const authToken = localStorage.getItem('authToken');
-      const response = await axios.get(`/api/device/${result}`,{
+      const authToken = localStorage.getItem("authToken");
+      const response = await axios.get(`/api/device/${result}`, {
         headers: {
-          'Authorization': `Bearer ${authToken}`
-        }
+          Authorization: `Bearer ${authToken}`,
+        },
       });
       if (response.data) {
         setDeviceHistory(response.data);
@@ -61,7 +63,7 @@ export const ScanPage = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-2xl space-y-6 relative">
-      <div className="absolute inset-0 bg-white/30 backdrop-blur-xl rounded-2xl shadow-2xl -z-10" />
+        <div className="absolute inset-0 bg-white/30 backdrop-blur-xl rounded-2xl shadow-2xl -z-10" />
         <div className="text-center mb-6">
           {!deviceHistory ? (
             <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -73,7 +75,9 @@ export const ScanPage = () => {
             </h1>
           )}
           {!deviceHistory && (
-            <p className="text-gray-600 mt-2 font-medium">Đặt mã QR vào khung hình để quét</p>
+            <p className="text-gray-600 mt-2 font-medium">
+              Đặt mã QR vào khung hình để quét
+            </p>
           )}
         </div>
         {!deviceHistory ? (
@@ -94,15 +98,15 @@ export const ScanPage = () => {
                   stopDecoding={stopDecoding}
                   onDecode={async (value) => {
                     if (value) {
-                       handleDecode(value);
-                       setStopDecoding(true);
+                      handleDecode(value);
+                      setStopDecoding(true);
                     }
                   }}
                   onError={handleError}
-                  constraints={{ // Thêm cấu hình này
-                    facingMode: "environment"
+                  constraints={{
+                    // Thêm cấu hình này
+                    facingMode: "environment",
                   }}
-                 
                   viewFinder={() => (
                     <div className="border-2 border-red-500 absolute top-0 left-0 w-full h-full" />
                   )}
@@ -119,7 +123,6 @@ export const ScanPage = () => {
           </div>
         ) : (
           <Card className="p-6 bg-white/80 backdrop-blur-sm shadow-xl border-0 animate-fade-in">
-           
             <div className="space-y-6 max-h-[75vh] overflow-y-auto pr-2">
               {/* Thông tin cơ bản */}
               <div className="grid gap-3">

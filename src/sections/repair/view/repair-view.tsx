@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/form";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { Combobox } from "@/components/ui/combobox";
+import { Combobox } from "@/sections/repair/combobox";
 import { SplashScreen } from "@/components/loading-screen";
 import { QrScannerDialog } from "@/sections/repair/qr-scanner";
 import axios from "axios";
@@ -27,7 +27,7 @@ type LinhKienItem = {
 
 type RepairFormValues = {
   deviceId: string;
-  type: "Sửa chữa" | "Bảo dưỡng"; 
+  type: "Sửa chữa" | "Bảo dưỡng";
   linhKienList: {
     linhKien: LinhKienItem | null;
     quantity: number;
@@ -36,17 +36,15 @@ type RepairFormValues = {
 };
 
 export function RepairView() {
-  const authToken = localStorage.getItem("authToken");
   const [loading, setLoading] = useState(true);
   const [linhKienOptions, setLinhKienOptions] = useState<LinhKienItem[]>([]);
   const [showScanner, setShowScanner] = useState(false);
   const router = useRouter();
-  console.log("linhKienOptions", linhKienOptions);
 
   const form = useForm<RepairFormValues>({
     defaultValues: {
       deviceId: "",
-      type: "Sửa chữa", 
+      type: "Sửa chữa",
       linhKienList: [{ linhKien: null, quantity: 1 }],
       note: "",
     },
@@ -55,6 +53,7 @@ export function RepairView() {
   useEffect(() => {
     const fetchLinhKien = async () => {
       try {
+        const authToken = localStorage.getItem("authToken");
         const response = await axios.get("/api/linhKien", {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -77,6 +76,7 @@ export function RepairView() {
   }, []);
 
   const onSubmit = async (values: RepairFormValues) => {
+    const authToken = localStorage.getItem("authToken");
     try {
       setLoading(true);
       const response = await axios.post(
@@ -170,58 +170,64 @@ export function RepairView() {
                   )}
                 />
               </div>
-              
+
               <FormField
-  control={form.control}
-  name="type"
-  render={({ field }) => (
-    <FormItem className="space-y-2">
-      <FormLabel className="text-sm font-medium">Loại</FormLabel>
-      <div className="flex gap-4">
-        <div 
-          className={`flex items-center px-4 py-2 rounded-lg cursor-pointer transition-all duration-200 ${
-            field.value === "Sửa chữa" 
-              ? "bg-blue-500 text-white shadow-lg" 
-              : "bg-white hover:bg-gray-100"
-          }`}
-          onClick={() => field.onChange("Sửa chữa")}
-        >
-          <input
-            type="radio"
-            id="repair"
-            {...field}
-            value="Sửa chữa"
-            checked={field.value === "Sửa chữa"}
-            className="w-4 h-4 mr-2 accent-white"
-          />
-          <label htmlFor="repair" className="text-sm cursor-pointer">
-            Sửa chữa
-          </label>
-        </div>
-        <div 
-          className={`flex items-center px-4 py-2 rounded-lg cursor-pointer transition-all duration-200 ${
-            field.value === "Bảo dưỡng" 
-              ? "bg-blue-500 text-white shadow-lg" 
-              : "bg-white hover:bg-gray-100"
-          }`}
-          onClick={() => field.onChange("Bảo dưỡng")}
-        >
-          <input
-            type="radio"
-            id="maintenance"
-            {...field}
-            value="Bảo dưỡng"
-            checked={field.value === "Bảo dưỡng"}
-            className="w-4 h-4 mr-2 accent-white"
-          />
-          <label htmlFor="maintenance" className="text-sm cursor-pointer">
-            Bảo dưỡng
-          </label>
-        </div>
-      </div>
-    </FormItem>
-  )}
-/>
+                control={form.control}
+                name="type"
+                render={({ field }) => (
+                  <FormItem className="space-y-2">
+                    <FormLabel className="text-sm font-medium">Loại</FormLabel>
+                    <div className="flex gap-4">
+                      <div
+                        className={`flex items-center px-4 py-2 rounded-lg cursor-pointer transition-all duration-200 ${
+                          field.value === "Sửa chữa"
+                            ? "bg-blue-500 text-white shadow-lg"
+                            : "bg-white hover:bg-gray-100"
+                        }`}
+                        onClick={() => field.onChange("Sửa chữa")}
+                      >
+                        <input
+                          type="radio"
+                          id="repair"
+                          {...field}
+                          value="Sửa chữa"
+                          checked={field.value === "Sửa chữa"}
+                          className="w-4 h-4 mr-2 accent-white"
+                        />
+                        <label
+                          htmlFor="repair"
+                          className="text-sm cursor-pointer"
+                        >
+                          Sửa chữa
+                        </label>
+                      </div>
+                      <div
+                        className={`flex items-center px-4 py-2 rounded-lg cursor-pointer transition-all duration-200 ${
+                          field.value === "Bảo dưỡng"
+                            ? "bg-blue-500 text-white shadow-lg"
+                            : "bg-white hover:bg-gray-100"
+                        }`}
+                        onClick={() => field.onChange("Bảo dưỡng")}
+                      >
+                        <input
+                          type="radio"
+                          id="maintenance"
+                          {...field}
+                          value="Bảo dưỡng"
+                          checked={field.value === "Bảo dưỡng"}
+                          className="w-4 h-4 mr-2 accent-white"
+                        />
+                        <label
+                          htmlFor="maintenance"
+                          className="text-sm cursor-pointer"
+                        >
+                          Bảo dưỡng
+                        </label>
+                      </div>
+                    </div>
+                  </FormItem>
+                )}
+              />
               {/* Linh kiện Fields */}
               <div className="space-y-2">
                 <div className="flex justify-between items-center">

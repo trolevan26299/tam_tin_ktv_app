@@ -3,8 +3,8 @@ import Device from '@/lib/models/Device'
 import connect from "@/utils/db";
 
 export async function POST(request: Request) {
-  await connect() 
-  try {
+    try {
+    await connect() 
     const data = await request.json()
     
     const device = await Device.findOne({ id_device: data.id_device })
