@@ -5,8 +5,6 @@ import { UserModel } from '@/lib/models/User';
 import { ObjectId } from 'mongodb';
 
 export async function GET(request: Request) {
-
-                
   const authToken = request.headers.get('Authorization')?.replace('Bearer ', '');
 
   if (!authToken) {

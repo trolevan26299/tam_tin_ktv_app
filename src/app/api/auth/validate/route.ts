@@ -12,17 +12,16 @@ export async function GET(req: Request) {
   try {
     await dbConnect();
     
-    const currentTimestamp = Math.floor(Date.now() / 1000);
-    // Tìm session và in ra để debug
     const session = await SessionModel.findOne({
       token: authToken,
+      expires: { $gt: new Date() }
     });
     
-    if (!session || session.expires <= currentTimestamp) {
+    if (!session) {
       return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
     }
 
-    return NextResponse.json(null, { status: 200 });
+    return NextResponse.json({ valid: true }, { status: 200 });
   } catch (error) {
     console.log("error",error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

@@ -4,8 +4,6 @@ import dbConnect from '@/lib/mongodb';
 import { UserModel } from '@/lib/models/User';
 import { SessionModel } from '@/lib/models/Session';
 
-
-
 export async function POST(req: Request) {
   try {
     await dbConnect();
@@ -23,12 +21,18 @@ export async function POST(req: Request) {
       }, { status: 403 });
     }
 
+    // Xóa các session cũ của user này
+    await SessionModel.deleteMany({
+      userId: user._id
+    });
+
     const authToken = crypto.randomBytes(32).toString('hex');
     
+    // Tạo session mới với thời hạn 24 giờ
     await SessionModel.create({
       token: authToken,
       userId: user._id,
-      expires: new Date(Date.now() + 24 * 60 * 60 * 1000000) // 1000 years
+      expires: new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 giờ
     });
 
     return NextResponse.json({

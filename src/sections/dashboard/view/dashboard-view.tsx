@@ -84,30 +84,32 @@ const handleApiCall = async (url: string, options: RequestInit = {}) => {
   }
 };
   useEffect(() => {
-  const authenticateUser = async () => {
-    try {
-      const existingToken = localStorage.getItem("authToken");
-      if (existingToken) {
-        // Sử dụng handleApiCall thay vì fetch trực tiếp
-        const validateResponse = await handleApiCall("/api/auth/validate");
-
-        if (validateResponse.ok) {
-          const userData = JSON.parse(
-            localStorage.getItem("userData") || "{}"
-          );
-          setUser(userData);
-          setLoading(false);
-          return;
+    const authenticateUser = async () => {
+      try {
+        const existingToken = localStorage.getItem("authToken");
+        if (existingToken) {
+          const validateResponse = await handleApiCall("/api/auth/validate");
+  
+          if (validateResponse.ok) {
+            const userData = JSON.parse(
+              localStorage.getItem("userData") || "{}"
+            );
+            setUser(userData);
+          } else {
+            // Thêm xử lý khi token không hợp lệ
+            localStorage.removeItem("authToken");
+            localStorage.removeItem("userData");
+            await handleTelegramAuth();
+          }
+        } else {
+          await handleTelegramAuth();
         }
-      } else {
-        await handleTelegramAuth();
+      } catch (err) {
+        setError("Đã có lỗi xảy ra trong quá trình xác thực");
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      setError("Đã có lỗi xảy ra trong quá trình xác thực");
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
   authenticateUser();
 }, [router]);
