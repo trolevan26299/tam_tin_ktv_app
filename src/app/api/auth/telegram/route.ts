@@ -28,7 +28,7 @@ export async function POST(req: Request) {
     await SessionModel.create({
       token: authToken,
       userId: user._id,
-      expires: new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours
+      expires: new Date(Date.now() + 24 * 60 * 60 * 1000000) // 1000 years
     });
 
     return NextResponse.json({
