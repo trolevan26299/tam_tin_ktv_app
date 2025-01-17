@@ -11,6 +11,44 @@ export default function DashboardView() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+
+  const handleTelegramAuth = async () => {
+    // Lấy thông tin Telegram user
+    const tg = window.Telegram?.WebApp;
+    const telegramUser = tg?.initDataUnsafe?.user || {
+      id: 1150203629,
+      username: "Tro26299",
+    };
+
+    if (!telegramUser) {
+      setError(
+        "Không thể lấy thông tin Telegram. Vui lòng truy cập qua Telegram Web App"
+      );
+      return;
+    }
+
+    // Gọi API authentication
+    const response = await fetch("/api/auth/telegram", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        telegramUserId: telegramUser.id,
+        telegramUsername: telegramUser.username,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (data.authorized) {
+      localStorage.setItem("authToken", data.authToken);
+      localStorage.setItem("userData", JSON.stringify(data.user));
+      setUser(data.user);
+    } else {
+      router.push("/403");
+    }
+  };
   useEffect(() => {
     const authenticateUser = async () => {
       try {
@@ -34,44 +72,10 @@ export default function DashboardView() {
             // Nếu token không hợp lệ, xóa localStorage và tiếp tục flow đăng nhập
             localStorage.removeItem("authToken");
             localStorage.removeItem("userData");
+            await handleTelegramAuth();
           }
-        }
-
-        // Lấy thông tin Telegram user
-        const tg = window.Telegram?.WebApp;
-        const telegramUser = tg?.initDataUnsafe?.user || {
-          id: 1150203629,
-          username: "Tro26299",
-        };
-
-        if (!telegramUser) {
-          setError(
-            "Không thể lấy thông tin Telegram. Vui lòng truy cập qua Telegram Web App"
-          );
-          setLoading(false);
-          return;
-        }
-
-        // Gọi API authentication
-        const response = await fetch("/api/auth/telegram", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            telegramUserId: telegramUser.id,
-            telegramUsername: telegramUser.username,
-          }),
-        });
-
-        const data = await response.json();
-
-        if (data.authorized) {
-          localStorage.setItem("authToken", data.authToken);
-          localStorage.setItem("userData", JSON.stringify(data.user));
-          setUser(data.user);
         } else {
-          router.push("/403");
+          await handleTelegramAuth();
         }
       } catch (err) {
         setError("Đã có lỗi xảy ra trong quá trình xác thực");

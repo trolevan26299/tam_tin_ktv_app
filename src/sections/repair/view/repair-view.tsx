@@ -48,6 +48,37 @@ export function RepairView() {
       linhKienList: [{ linhKien: null, quantity: 1 }],
       note: "",
     },
+    mode: "onChange",
+    resolver: (values) => {
+      const errors: any = {};
+  
+      if (!values.deviceId) {
+        errors.deviceId = {
+          type: "required",
+          message: "Vui lòng nhập mã thiết bị"
+        };
+      }
+  
+      if (!values.type) {
+        errors.type = {
+          type: "required",
+          message: "Vui lòng chọn loại"
+        };
+      }
+  
+      if (!values.linhKienList.every(item => item.linhKien !== null)) {
+        errors.linhKienList = {
+          type: "validate",
+          message: "Vui lòng chọn linh kiện cho tất cả các dòng"
+        };
+      }
+  
+      return {
+        values,
+        errors: Object.keys(errors).length > 0 ? errors : {},
+      };
+    }
+    
   });
 
   useEffect(() => {
@@ -77,6 +108,7 @@ export function RepairView() {
 
   const onSubmit = async (values: RepairFormValues) => {
     const authToken = localStorage.getItem("authToken");
+    const userData = JSON.parse(localStorage.getItem("userData") || "{}");
     try {
       setLoading(true);
       const response = await axios.post(
@@ -91,8 +123,10 @@ export function RepairView() {
             total: item.quantity,
           })),
           note: values.note,
-          staff_repair: JSON.parse(localStorage.getItem("userData") || "{}")
-            .name,
+          staff_repair: {
+            id: userData.id,
+            name: userData.name || "",
+        },
         },
         {
           headers: {
@@ -258,7 +292,7 @@ export function RepairView() {
                       control={form.control}
                       name={`linhKienList.${index}.linhKien`}
                       render={({ field }) => (
-                        <FormItem className="flex-1">
+                        <FormItem className="w-[67%]">
                           <FormControl>
                             <Combobox
                               options={linhKienOptions}
@@ -275,7 +309,7 @@ export function RepairView() {
                       control={form.control}
                       name={`linhKienList.${index}.quantity`}
                       render={({ field }) => (
-                        <FormItem className="w-24">
+                        <FormItem className="w-[20%]">
                           <FormControl>
                             <Input
                               type="number"
@@ -291,6 +325,7 @@ export function RepairView() {
                     <Button
                       type="button"
                       variant="destructive"
+                      className="w-[13%]" 
                       size="icon"
                       onClick={() => {
                         const currentList = form.getValues("linhKienList");
@@ -333,6 +368,7 @@ export function RepairView() {
             {/* Action Buttons */}
             <div className="flex gap-4">
               <Button
+              disabled={!form.formState.isValid}
                 type="submit"
                 className="flex-1 bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800"
               >
