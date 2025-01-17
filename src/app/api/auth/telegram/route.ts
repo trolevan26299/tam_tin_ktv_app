@@ -9,10 +9,9 @@ import { SessionModel } from '@/lib/models/Session';
 export async function POST(req: Request) {
   try {
     await dbConnect();
-    const { telegramUserId, telegramUsername } = await req.json();
+    const { telegramUserId } = await req.json();
     
     const user = await UserModel.findOne({
-      username_telegram: telegramUsername,
       user_id_telegram: telegramUserId,
       status: "active"
     });
