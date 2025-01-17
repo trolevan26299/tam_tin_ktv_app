@@ -15,10 +15,7 @@ export default function DashboardView() {
   const handleTelegramAuth = async () => {
     // Lấy thông tin Telegram user
     const tg = window.Telegram?.WebApp;
-    const telegramUser = tg?.initDataUnsafe?.user || {
-      id: 1150203629,
-      username: "Tro26299",
-    };
+    const telegramUser = tg?.initDataUnsafe?.user 
 
     if (!telegramUser) {
       setError(
@@ -49,43 +46,69 @@ export default function DashboardView() {
       router.push("/403");
     }
   };
+  
+const handleApiCall = async (url: string, options: RequestInit = {}) => {
+  const token = localStorage.getItem("authToken");
+  
+  try {
+    const response = await fetch(url, {
+      ...options,
+      headers: {
+        ...options.headers,
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.status === 401) {
+      // Token không hợp lệ, xóa token cũ và đăng nhập lại
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("userData");
+      await handleTelegramAuth();
+      
+      // Thử lại request với token mới
+      const newToken = localStorage.getItem("authToken");
+      return fetch(url, {
+        ...options,
+        headers: {
+          ...options.headers,
+          Authorization: `Bearer ${newToken}`,
+        },
+      });
+    }
+
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
   useEffect(() => {
-    const authenticateUser = async () => {
-      try {
-        const existingToken = localStorage.getItem("authToken");
-        if (existingToken) {
-          // Validate token với server
-          const validateResponse = await fetch("/api/auth/validate", {
-            headers: {
-              Authorization: `Bearer ${existingToken}`,
-            },
-          });
+  const authenticateUser = async () => {
+    try {
+      const existingToken = localStorage.getItem("authToken");
+      if (existingToken) {
+        // Sử dụng handleApiCall thay vì fetch trực tiếp
+        const validateResponse = await handleApiCall("/api/auth/validate");
 
-          if (validateResponse.ok) {
-            const userData = JSON.parse(
-              localStorage.getItem("userData") || "{}"
-            );
-            setUser(userData);
-            setLoading(false);
-            return;
-          } else {
-            // Nếu token không hợp lệ, xóa localStorage và tiếp tục flow đăng nhập
-            localStorage.removeItem("authToken");
-            localStorage.removeItem("userData");
-            await handleTelegramAuth();
-          }
-        } else {
-          await handleTelegramAuth();
+        if (validateResponse.ok) {
+          const userData = JSON.parse(
+            localStorage.getItem("userData") || "{}"
+          );
+          setUser(userData);
+          setLoading(false);
+          return;
         }
-      } catch (err) {
-        setError("Đã có lỗi xảy ra trong quá trình xác thực");
-      } finally {
-        setLoading(false);
+      } else {
+        await handleTelegramAuth();
       }
-    };
+    } catch (err) {
+      setError("Đã có lỗi xảy ra trong quá trình xác thực");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    authenticateUser();
-  }, [router]);
+  authenticateUser();
+}, [router]);
 
   if (loading) {
     return (
