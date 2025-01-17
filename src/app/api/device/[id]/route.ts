@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(req: Request, route: { params: { id: string } }) {
   await connect();
+  console.log("route.params.id:",route.params.id)
   try {
     const device = await DeviceModel.findOne({ id_device: route.params.id });
     if (!device) {
