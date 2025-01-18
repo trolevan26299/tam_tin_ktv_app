@@ -6,18 +6,15 @@ export async function GET(req: Request, route: { params: { userId: string } }) {
   await connect();
   try {
     const linhKiens = await LinhKienModel.find({
-      "data_ung": {
+      data_ung: {
         $elemMatch: {
           id: route.params.userId,
-          total: { $gt: 0 }
-        }
-      }
+          total: { $ne: 0 },
+        },
+      },
     });
     return NextResponse.json(linhKiens);
   } catch (error: any) {
-    return NextResponse.json(
-      { error: 'Lỗi server' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Lỗi server" }, { status: 500 });
   }
 }

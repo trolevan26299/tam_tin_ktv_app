@@ -70,7 +70,9 @@ export const HistoryLinhKienView = () => {
                       <tr key={linhKien._id} className="hover:bg-white/5 transition-colors duration-200">
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-200">{linhKien.name_linh_kien}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
-                          <span className="px-3 py-1 rounded-full bg-blue-500/20 text-blue-300">{linhKien.total}</span>
+                          <span className="px-3 py-1 rounded-full bg-blue-500/20 text-blue-300">
+                            {linhKien.data_ung.find((item: any) => item.id === userId)?.total || 0}
+                          </span>
                         </td>
                       </tr>
                     ))}
