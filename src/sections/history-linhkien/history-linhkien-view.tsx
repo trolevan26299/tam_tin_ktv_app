@@ -6,12 +6,11 @@ import { SplashScreen } from "@/components/loading-screen";
 import axios from "axios";
 
 export const HistoryLinhKienView = () => {
-  const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
 
   const [linhKiens, setLinhKiens] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-
+  console.log("linhKiens", linhKiens);
   const fetchLinhKiens = async () => {
     try {
       const authToken = localStorage.getItem("authToken");
@@ -48,9 +47,7 @@ export const HistoryLinhKienView = () => {
       <div className="max-w-4xl mx-auto">
         <div className="bg-white/10 backdrop-blur-lg rounded-2xl overflow-hidden border border-gray-700/50 shadow-2xl">
           <div className="px-6 py-5 border-b border-gray-700/50 bg-gradient-to-r from-blue-500/20 to-purple-500/20">
-            <h2 className="text-2xl font-bold text-white text-center">
-              Lịch Sử Ứng Linh Kiện
-            </h2>
+            <h2 className="text-2xl font-bold text-white text-center">Lịch Sử Ứng Linh Kiện</h2>
           </div>
 
           {/* Table Container */}
@@ -70,17 +67,10 @@ export const HistoryLinhKienView = () => {
                   </thead>
                   <tbody className="divide-y divide-gray-700/50">
                     {linhKiens.map((linhKien) => (
-                      <tr
-                        key={linhKien._id}
-                        className="hover:bg-white/5 transition-colors duration-200"
-                      >
+                      <tr key={linhKien._id} className="hover:bg-white/5 transition-colors duration-200">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-200">{linhKien.name_linh_kien}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
-                          {linhKien.name_linh_kien}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
-                          <span className="px-3 py-1 rounded-full bg-blue-500/20 text-blue-300">
-                            {linhKien.total}
-                          </span>
+                          <span className="px-3 py-1 rounded-full bg-blue-500/20 text-blue-300">{linhKien.total}</span>
                         </td>
                       </tr>
                     ))}
@@ -88,9 +78,7 @@ export const HistoryLinhKienView = () => {
                 </table>
               ) : (
                 <div className="flex items-center justify-center h-full">
-                  <p className="text-gray-300 text-lg">
-                    Bạn chưa ứng linh kiện nào
-                  </p>
+                  <p className="text-gray-300 text-lg">Bạn chưa ứng linh kiện nào</p>
                 </div>
               )}
             </div>
