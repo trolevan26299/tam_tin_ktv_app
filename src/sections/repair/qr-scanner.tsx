@@ -1,14 +1,12 @@
 "use client";
 
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { useToast } from "@/components/ui/use-toast";
 import dynamic from "next/dynamic";
 
-const DynamicQrScanner = dynamic(
-  () => import("@yudiel/react-qr-scanner").then((mod) => mod.QrScanner),
-  {
-    ssr: false,
-  }
-);
+const DynamicQrScanner = dynamic(() => import("@yudiel/react-qr-scanner").then((mod) => mod.QrScanner), {
+  ssr: false,
+});
 
 interface QrScannerProps {
   onResult: (result: string) => void;
@@ -16,6 +14,21 @@ interface QrScannerProps {
 }
 
 export function QrScannerDialog({ onResult, onClose }: QrScannerProps) {
+  const { toast } = useToast();
+
+  const handleDecode = (result: string) => {
+    if (!result) {
+      toast({
+        variant: "destructive",
+        title: "Không tìm thấy thiết bị",
+        description: "Mã QR không khớp với bất kỳ thiết bị nào trong hệ thống.",
+        duration: 2000,
+        color: "red",
+      });
+      return;
+    }
+    onResult(result);
+  };
   return (
     <Dialog open onOpenChange={onClose}>
       <DialogContent className="rounded-2xl sm:max-w-[600px] bg-gradient-to-br from-gray-900/90 to-black/90 border-none [&>button[aria-label='Close']]:hidden">
@@ -47,7 +60,7 @@ export function QrScannerDialog({ onResult, onClose }: QrScannerProps) {
             <div className="absolute top-0 right-0 w-20 h-20 border-t-4 border-r-4 border-blue-500 rounded-tr-2xl" />
             <div className="absolute bottom-0 left-0 w-20 h-20 border-b-4 border-l-4 border-blue-500 rounded-bl-2xl" />
             <div className="absolute bottom-0 right-0 w-20 h-20 border-b-4 border-r-4 border-blue-500 rounded-br-2xl" />
-            
+
             {/* Scanning line animation */}
             <div className="absolute top-0 left-0 w-full animate-scan">
               <div className="h-[2px] bg-gradient-to-r from-transparent via-blue-500 to-transparent" />
@@ -58,7 +71,7 @@ export function QrScannerDialog({ onResult, onClose }: QrScannerProps) {
           <div className="rounded-2xl overflow-hidden h-full shadow-2xl">
             <DynamicQrScanner
               audio={false}
-              onDecode={onResult}
+              onDecode={handleDecode}
               onError={(error) => {
                 console.error(error);
               }}

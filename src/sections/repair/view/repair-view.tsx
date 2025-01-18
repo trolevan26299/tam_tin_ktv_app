@@ -131,8 +131,9 @@ export function RepairView() {
       if (response.status === 200) {
         toast({
           title: "Cập nhật thành công !",
-          description: "Thiết bị đã được cập nhật thành công !",
+          description: "Cập nhật sữa chữa thành công !",
           variant: "default",
+          color: "green",
         });
         router.push("/");
       }
@@ -142,6 +143,7 @@ export function RepairView() {
         title: "Lỗi khi cập nhật",
         description: "Lỗi khi cập nhật",
         variant: "destructive",
+        color: "red",
       });
     } finally {
       setLoading(false);
