@@ -1,17 +1,12 @@
-'use client'
+"use client";
 import MainLayout from "@/layouts/main.layout";
-import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { useEffect } from "react";
-import { addToHomeScreen } from '@telegram-apps/sdk-react';
+import { addToHomeScreen } from "@telegram-apps/sdk-react";
+import { AuthProvider } from "@/contexts/auth.context";
 
 const inter = Inter({ subsets: ["latin"] });
-
-// export const metadata: Metadata = {
-//   title: "Tâm Tín - Chuyên cung cấp dịch vụ máy đếm tiền",
-//   description: "Chuyên cung cấp dịch vụ máy đếm tiền và vật tư máy đếm tiền",
-// };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
@@ -23,9 +18,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en">
       <body className={inter.className}>
-      <script src="https://telegram.org/js/telegram-web-app.js"></script>
-         
+        <script src="https://telegram.org/js/telegram-web-app.js"></script>
+        <AuthProvider>
           <MainLayout>{children}</MainLayout>
+        </AuthProvider>
       </body>
     </html>
   );

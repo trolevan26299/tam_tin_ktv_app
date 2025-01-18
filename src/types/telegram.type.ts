@@ -15,21 +15,21 @@ export interface TelegramWebApp {
   initData: string;
   initDataUnsafe: TelegramWebAppInitData;
   ready?: () => void;
-  expand?: () => void;
+  expand: () => void;
   close?: () => void;
   // Thêm các định nghĩa mới
   enableClosingConfirmation: () => void;
   MainButton: {
-      setText: (text: string) => void;
-      show: () => void;
-      onClick: (callback: () => void) => void;
+    setText: (text: string) => void;
+    show: () => void;
+    onClick: (callback: () => void) => void;
   };
 }
 
 declare global {
   interface Window {
-      Telegram?: {
-          WebApp: TelegramWebApp;
-      };
+    Telegram?: {
+      WebApp: TelegramWebApp;
+    };
   }
 }
