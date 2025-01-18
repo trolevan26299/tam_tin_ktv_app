@@ -5,6 +5,7 @@ import "./globals.css";
 import { useEffect } from "react";
 import { addToHomeScreen } from "@telegram-apps/sdk-react";
 import { AuthProvider } from "@/contexts/auth.context";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,7 +21,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body className={inter.className}>
         <script src="https://telegram.org/js/telegram-web-app.js"></script>
         <AuthProvider>
-          <MainLayout>{children}</MainLayout>
+          <MainLayout>
+            {children} <Toaster />
+          </MainLayout>
         </AuthProvider>
       </body>
     </html>

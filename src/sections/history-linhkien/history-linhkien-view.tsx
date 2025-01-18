@@ -10,7 +10,6 @@ export const HistoryLinhKienView = () => {
 
   const [linhKiens, setLinhKiens] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  console.log("linhKiens", linhKiens);
   const fetchLinhKiens = async () => {
     try {
       const authToken = localStorage.getItem("authToken");

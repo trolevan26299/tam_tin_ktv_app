@@ -4,13 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Combobox } from "@/sections/repair/combobox";
@@ -51,34 +45,33 @@ export function RepairView() {
     mode: "onChange",
     resolver: (values) => {
       const errors: any = {};
-  
+
       if (!values.deviceId) {
         errors.deviceId = {
           type: "required",
-          message: "Vui lòng nhập mã thiết bị"
+          message: "Vui lòng nhập mã thiết bị",
         };
       }
-  
+
       if (!values.type) {
         errors.type = {
           type: "required",
-          message: "Vui lòng chọn loại"
+          message: "Vui lòng chọn loại",
         };
       }
-  
-      if (!values.linhKienList.every(item => item.linhKien !== null)) {
+
+      if (!values.linhKienList.every((item) => item.linhKien !== null)) {
         errors.linhKienList = {
           type: "validate",
-          message: "Vui lòng chọn linh kiện cho tất cả các dòng"
+          message: "Vui lòng chọn linh kiện cho tất cả các dòng",
         };
       }
-  
+
       return {
         values,
         errors: Object.keys(errors).length > 0 ? errors : {},
       };
-    }
-    
+    },
   });
 
   useEffect(() => {
@@ -126,7 +119,7 @@ export function RepairView() {
           staff_repair: {
             id: userData.id,
             name: userData.name || "",
-        },
+          },
         },
         {
           headers: {
@@ -180,16 +173,10 @@ export function RepairView() {
                   name="deviceId"
                   render={({ field }) => (
                     <FormItem className="flex-1">
-                      <FormLabel className="text-sm font-medium">
-                        Mã thiết bị
-                      </FormLabel>
+                      <FormLabel className="text-sm font-medium">Mã thiết bị</FormLabel>
                       <div className="flex gap-2">
                         <FormControl>
-                          <Input
-                            placeholder="Nhập hoặc quét mã thiết bị"
-                            {...field}
-                            className="bg-white"
-                          />
+                          <Input placeholder="Nhập hoặc quét mã thiết bị" {...field} className="bg-white" />
                         </FormControl>
                         <Button
                           type="button"
@@ -214,9 +201,7 @@ export function RepairView() {
                     <div className="flex gap-4">
                       <div
                         className={`flex items-center px-4 py-2 rounded-lg cursor-pointer transition-all duration-200 ${
-                          field.value === "Sửa chữa"
-                            ? "bg-blue-500 text-white shadow-lg"
-                            : "bg-white hover:bg-gray-100"
+                          field.value === "Sửa chữa" ? "bg-blue-500 text-white shadow-lg" : "bg-white hover:bg-gray-100"
                         }`}
                         onClick={() => field.onChange("Sửa chữa")}
                       >
@@ -228,10 +213,7 @@ export function RepairView() {
                           checked={field.value === "Sửa chữa"}
                           className="w-4 h-4 mr-2 accent-white"
                         />
-                        <label
-                          htmlFor="repair"
-                          className="text-sm cursor-pointer"
-                        >
+                        <label htmlFor="repair" className="text-sm cursor-pointer">
                           Sửa chữa
                         </label>
                       </div>
@@ -251,10 +233,7 @@ export function RepairView() {
                           checked={field.value === "Bảo dưỡng"}
                           className="w-4 h-4 mr-2 accent-white"
                         />
-                        <label
-                          htmlFor="maintenance"
-                          className="text-sm cursor-pointer"
-                        >
+                        <label htmlFor="maintenance" className="text-sm cursor-pointer">
                           Bảo dưỡng
                         </label>
                       </div>
@@ -272,10 +251,7 @@ export function RepairView() {
                     size="sm"
                     onClick={() => {
                       const currentList = form.getValues("linhKienList");
-                      form.setValue("linhKienList", [
-                        ...currentList,
-                        { linhKien: null, quantity: 1 },
-                      ]);
+                      form.setValue("linhKienList", [...currentList, { linhKien: null, quantity: 1 }]);
                     }}
                     className="text-blue-600 hover:text-blue-700"
                   >
@@ -284,10 +260,7 @@ export function RepairView() {
                 </div>
 
                 {form.watch("linhKienList").map((_, index) => (
-                  <div
-                    key={index}
-                    className="flex items-end gap-4 bg-gray-50 p-4 rounded-lg"
-                  >
+                  <div key={index} className="flex items-end gap-4 bg-gray-50 p-4 rounded-lg">
                     <FormField
                       control={form.control}
                       name={`linhKienList.${index}.linhKien`}
@@ -311,12 +284,7 @@ export function RepairView() {
                       render={({ field }) => (
                         <FormItem className="w-[20%]">
                           <FormControl>
-                            <Input
-                              type="number"
-                              min="1"
-                              {...field}
-                              className="bg-white"
-                            />
+                            <Input type="number" min="1" {...field} className="bg-white" />
                           </FormControl>
                         </FormItem>
                       )}
@@ -325,7 +293,7 @@ export function RepairView() {
                     <Button
                       type="button"
                       variant="destructive"
-                      className="w-[13%]" 
+                      className="w-[13%]"
                       size="icon"
                       onClick={() => {
                         const currentList = form.getValues("linhKienList");
@@ -349,9 +317,7 @@ export function RepairView() {
                 name="note"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium">
-                      Ghi chú
-                    </FormLabel>
+                    <FormLabel className="text-sm font-medium">Ghi chú</FormLabel>
                     <FormControl>
                       <Textarea
                         placeholder="Nhập nội dung sửa chữa"
@@ -368,7 +334,7 @@ export function RepairView() {
             {/* Action Buttons */}
             <div className="flex gap-4">
               <Button
-              disabled={!form.formState.isValid}
+                disabled={!form.formState.isValid}
                 type="submit"
                 className="flex-1 bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800"
               >
