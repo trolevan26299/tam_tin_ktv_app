@@ -23,9 +23,14 @@ interface ComboboxProps {
   value: any
   onChange: (value: any) => void
   displayField: string
+  placeholder?: string
+  searchPlaceholder?: string
+  emptyMessage?: string
 }
 
-export function Combobox({ options = [], value, onChange, displayField }: ComboboxProps) {
+export function Combobox({ options = [], value, onChange, displayField, placeholder = "Chọn linh kiện...",
+  searchPlaceholder = "Tìm kiếm linh kiện...",
+  emptyMessage = "Không tìm thấy linh kiện." }: ComboboxProps) {
   const [open, setOpen] = React.useState(false)
 
   return (
@@ -35,17 +40,17 @@ export function Combobox({ options = [], value, onChange, displayField }: Combob
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between"
+          className="w-full justify-between truncate"
         >
-          {value ? value[displayField] : "Chọn linh kiện..."}
+               {value && value[displayField] ? value[displayField] : placeholder}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0">
         <Command>
-          <CommandInput placeholder="Tìm kiếm linh kiện..." className="h-9" />
+          <CommandInput placeholder={searchPlaceholder} className="h-9" />
           <CommandList>
-            <CommandEmpty>Không tìm thấy linh kiện.</CommandEmpty>
+            <CommandEmpty>{emptyMessage}</CommandEmpty>
             <CommandGroup>
               {options.map((option) => (
                 <CommandItem
