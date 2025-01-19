@@ -22,5 +22,7 @@ interface ComponentRepair {
     name_customer?: string; // tên khách hàng
     history_repair?: HistoryRepair[]; // lịch sử sửa chữa
     createdAt?: Date;       // ngày tạo (tự động từ MongoDB)
-    updatedAt?: Date;       // ngày cập nhật (tự động từ MongoDB)
+    updatedAt?: Date;   
+    warranty?: number;
+    date_buy?:string    // ngày cập nhật (tự động từ MongoDB)
   }

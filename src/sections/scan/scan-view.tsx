@@ -119,7 +119,7 @@ export const ScanPage = () => {
             </div>
           </div>
         ) : (
-          <Card className="p-6 bg-white/80 backdrop-blur-sm shadow-xl border-0 animate-fade-in">
+          <Card className="p-3 bg-white/80 backdrop-blur-sm shadow-xl border-0 animate-fade-in">
             <div className="space-y-6 max-h-[75vh] overflow-y-auto pr-2">
               {/* Thông tin cơ bản */}
               <div className="grid gap-3">
@@ -131,17 +131,28 @@ export const ScanPage = () => {
                   <span className="font-medium min-w-24">Mã thiết bị:</span>
                   <span>{deviceHistory.id_device}</span>
                 </div>
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-0">
                   <span className="font-medium min-w-24">Trạng thái:</span>
                   <span className="px-2 py-1 rounded-full text-sm bg-green-100 text-green-800">
                     {deviceHistory.status}
                   </span>
                 </div>
+                <div className="flex flex-row justify-between items-center">
+
+                <div className="flex flex-row justify-between items-center">
+                  <span className="font-medium min-w-20">Bảo hành:</span>
+                  <span>{deviceHistory.warranty}T</span>
+                </div>
+                <div className="flex flex-row justify-between items-center">
+                  <span className="font-medium min-w-24">Ngày mua:</span>
+                  <span>{deviceHistory.date_buy}</span>
+                </div>
+                </div>
               </div>
 
               {/* Thông tin khách hàng */}
-              <div className="border-t pt-4">
-                <h3 className="font-medium mb-3">Thông tin khách hàng</h3>
+              <div className="border-t pt-2">
+                <h3 className="font-medium mb-2">Thông tin khách hàng:</h3>
                 <div className="grid gap-2">
                   <div className="flex items-center gap-2">
                     <span className="font-medium min-w-32">Loại khách hàng:</span>
@@ -155,7 +166,7 @@ export const ScanPage = () => {
               </div>
 
               {/* Lịch sử sửa chữa */}
-              <div className="border-t pt-4">
+              <div className="border-t pt-2">
                 <h3 className="font-medium mb-3">Lịch sử sửa chữa</h3>
                 <div className="space-y-4">
                   {deviceHistory.history_repair?.map((repair: any, index: number) => (

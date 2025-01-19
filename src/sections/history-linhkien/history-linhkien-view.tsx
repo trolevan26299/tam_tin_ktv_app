@@ -87,10 +87,10 @@ export const HistoryLinhKienView = () => {
         </div>
 
         {/* Back Button */}
-        <div className="mt-8 flex justify-center">
+        <div className="mt-5 flex justify-center w-full">
           <a
             href="/"
-            className="group relative inline-flex items-center px-8 py-3 overflow-hidden rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg transition-all duration-300 hover:scale-105"
+            className="w-full justify-center group relative inline-flex items-center px-8 py-3 overflow-hidden rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg transition-all duration-300 hover:scale-105"
           >
             <span className="absolute left-0 top-0 h-full w-0 bg-gradient-to-r from-purple-600 to-blue-600 transition-all duration-500 ease-out group-hover:w-full"></span>
             <span className="relative flex items-center gap-2">

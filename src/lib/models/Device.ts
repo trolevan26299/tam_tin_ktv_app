@@ -66,6 +66,14 @@ const deviceSchema = new Schema({
     type: [history_repairSchema],
     require: false,
   },
+  warranty: { // thời gian bảo hành
+    type: Number,
+    require: false,
+  },
+  date_buy: { // ngày mua
+    type: String,
+    require: false,
+  },
 
 });
 
