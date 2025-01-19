@@ -319,39 +319,39 @@ export function RepairView() {
                 />
               ) : (
                 <div className="flex gap-2">
-                <FormField
-                  control={form.control}
-                  name="customer"
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <FormLabel className="text-sm font-medium">
-                        Khách hàng
-                      </FormLabel>
-                      <div className="flex gap-2">
-                        <FormControl className="w-[70%]">
-                          <Combobox
-                            options={customers}
-                            value={field.value}
-                            onChange={field.onChange}
-                            displayField="name"
-                            placeholder="Chọn khách hàng"
-                            searchPlaceholder="Tìm kiếm khách hàng..."
-                            emptyMessage="Không tìm thấy khách hàng"
-                          />
-                        </FormControl>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          onClick={() => setShowCustomerDialog(true)}
-                          className="w-[30%] whitespace-nowrap"
-                        >
-                          + Thêm mới
-                        </Button>
-                      </div>
-                    </FormItem>
-                  )}
-                />
-              </div>
+                  <FormField
+                    control={form.control}
+                    name="customer"
+                    render={({ field }) => (
+                      <FormItem className="w-full">
+                        <FormLabel className="text-sm font-medium">
+                          Khách hàng
+                        </FormLabel>
+                        <div className="flex gap-2">
+                          <FormControl className="w-[70%]">
+                            <Combobox
+                              options={customers}
+                              value={field.value}
+                              onChange={field.onChange}
+                              displayField="name"
+                              placeholder="Chọn khách hàng"
+                              searchPlaceholder="Tìm kiếm khách hàng..."
+                              emptyMessage="Không tìm thấy khách hàng"
+                            />
+                          </FormControl>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => setShowCustomerDialog(true)}
+                            className="w-[30%] whitespace-nowrap"
+                          >
+                            + Thêm mới
+                          </Button>
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                </div>
               )}
 
               {/* Repair Type */}
@@ -471,10 +471,12 @@ export function RepairView() {
                           <FormControl>
                             <Input
                               type="number"
-                              min="1"
                               {...field}
                               onChange={(e) => {
-                                const value = parseInt(e.target.value) || 1;
+                                const value =
+                                  e.target.value === ""
+                                    ? ""
+                                    : parseInt(e.target.value);
                                 field.onChange(value);
                               }}
                               className="bg-white"
