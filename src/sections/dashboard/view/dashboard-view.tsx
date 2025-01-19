@@ -43,7 +43,13 @@ export default function DashboardView() {
               onClick={() => router.push("/scan")}
               className="h-14 text-lg font-semibold bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 transform hover:scale-105 transition-all duration-200 shadow-lg shadow-blue-500/30"
             >
-              🔍 Scan thiết bị
+              🔍 Scan thiết bị Tâm Tín
+            </Button>
+            <Button
+              onClick={() => router.push("/check-device-outside")}
+              className="h-14 text-lg font-semibold bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 transform hover:scale-105 transition-all duration-200 shadow-lg shadow-green-500/30"
+            >
+              🔍 Kiểm tra thiết bị ngoài
             </Button>
 
             <Button
