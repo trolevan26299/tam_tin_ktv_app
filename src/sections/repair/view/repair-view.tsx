@@ -209,7 +209,7 @@ export function RepairView() {
             id: userData.id
           },
           nguoi_tao: userData.name || "",
-          noi_dung: `${values.type} - ${values.deviceType === "TamTin" ? `Thiết bị: ${values.deviceId}` : `Khách hàng: ${values.customer?.name}`}`,
+          noi_dung: values.note,
           total: item.total,
           create_date: currentDate,
           device_type: values.deviceType === "TamTin" ? "Tâm Tín" : "Khách hàng"
