@@ -24,6 +24,7 @@ import {
   RepairFormValues,
 } from "@/types/customer.type";
 import { CustomerDialog } from "../customer-dialog";
+import { formatDateTime, formatDateTimeTransaction } from "@/utils/format-datetime";
 
 export function RepairView() {
   const [loading, setLoading] = useState(true);
@@ -169,6 +170,7 @@ export function RepairView() {
   const onSubmit = async (values: RepairFormValues) => {
     const authToken = localStorage.getItem("authToken");
     const userData = JSON.parse(localStorage.getItem("userData") || "{}");
+    const currentDate = formatDateTimeTransaction(new Date());
     try {
       setLoading(true);
       const endpoint =
@@ -196,6 +198,27 @@ export function RepairView() {
       const response = await axios.post(endpoint, payload, {
         headers: { Authorization: `Bearer ${authToken}` },
       });
+
+      for (const item of values.linhKienList) {
+        const transactionPayload = {
+          name_linh_kien: item.name_linh_kien,
+          date_update: currentDate,
+          type: values.type,
+          nhan_vien: {
+            name: userData.name || "",
+            id: userData.id
+          },
+          nguoi_tao: userData.name || "",
+          noi_dung: `${values.type} - ${values.deviceType === "TamTin" ? `Thiết bị: ${values.deviceId}` : `Khách hàng: ${values.customer?.name}`}`,
+          total: item.total,
+          create_date: currentDate,
+          device_type: values.deviceType === "TamTin" ? "Tâm Tín" : "Khách hàng"
+        };
+
+        await axios.post("/api/transactions/linhkien", transactionPayload, {
+          headers: { Authorization: `Bearer ${authToken}` },
+        });
+      }
 
       if (response.status === 200) {
         toast({
