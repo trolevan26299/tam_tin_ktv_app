@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     const { telegramUserId } = await req.json();
     
     const user = await UserModel.findOne({
-      user_id_telegram: telegramUserId,
+      user_id_telegram: telegramUserId.toString(),
       status: "active"
     });
 
