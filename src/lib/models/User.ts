@@ -7,4 +7,4 @@ const userSchema = new mongoose.Schema({
   regDt: String
 });
 
-export const UserModel = mongoose.models?.Staff || mongoose.model('Staff', userSchema);
+export const UserModel = mongoose.models?.staff || mongoose.model('staff', userSchema);
