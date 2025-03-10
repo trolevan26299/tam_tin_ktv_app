@@ -21,6 +21,7 @@ const linhKienSchema = new Schema({
   create_date: { type: String, required: true },
   user_create: { type: userCreateSchema, required: true },
   data_ung: { type: [dataUngSchema], required: false },
+  price: { type: Number, required: true },
 });
 
 export default mongoose.models.linh_kien || mongoose.model("linh_kien", linhKienSchema ,'linh_kien');

@@ -1,7 +1,8 @@
 export type  ILinhKienItem = {
     _id: string;
     name_linh_kien: string | null;
-    total: number;
+    total?: number;
+    price?: number;
   };
 
 export type ICustomer = {
@@ -22,5 +23,6 @@ export type RepairFormValues = {
     type: "Sửa chữa" | "Bảo dưỡng";
     linhKienList:ILinhKienItem[];
     note: string;
+    tongTien?: string;
   };
   

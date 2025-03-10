@@ -10,7 +10,7 @@ const transactionLinhKienSchema = new Schema({
       id: { type: String, required: true }
     },
     nguoi_tao: { type: String, required: true },
-    noi_dung: { type: String, required: true },
+    noi_dung: { type: String, required: false },
     total: { type: Number, required: true },
     create_date: { type: String, required: true },
     device_type: { type: String, required: true }

@@ -25,6 +25,8 @@ import {
 } from "@/types/customer.type";
 import { CustomerDialog } from "../customer-dialog";
 import { formatDateTime, formatDateTimeTransaction } from "@/utils/format-datetime";
+import { formatCurrency } from "@/utils/format-money";
+import { parseCurrency } from "@/utils/format-money";
 
 export function RepairView() {
   const [loading, setLoading] = useState(true);
@@ -42,6 +44,7 @@ export function RepairView() {
       type: "Sửa chữa",
       linhKienList: [{ _id: "", name_linh_kien: null, total: 1 }],
       note: "",
+      
     },
     mode: "onChange",
     resolver: (values) => {
@@ -58,6 +61,12 @@ export function RepairView() {
         errors.customer = {
           type: "required",
           message: "Vui lòng chọn khách hàng",
+        };
+      }
+      if (values.deviceType === "Outside" && values.type === "Sửa chữa" && !values.tongTien) {
+        errors.tongTien = {
+          type: "required",
+          message: "Vui lòng nhập tổng tiền",
         };
       }
 
@@ -177,28 +186,61 @@ export function RepairView() {
         values.deviceType === "TamTin"
           ? "/api/device/repair"
           : "/api/customers/repair";
-      const payload = {
-        ...(values.deviceType === "TamTin"
-          ? { id_device: values.deviceId }
-          : { customer_id: values.customer?._id }),
-        type_repair: values.type,
-        date_repair: new Date().toISOString().split("T")[0],
-        linh_kien: values.linhKienList.map((item) => ({
-          id: item._id,
-          name: item.name_linh_kien,
-          total: item.total,
-        })),
-        note: values.note,
-        staff_repair: {
-          id: userData.id,
-          name: userData.name || "",
-        },
-      };
+          const repairPayload = {
+            ...(values.deviceType === "TamTin"
+              ? { id_device: values.deviceId }
+              : { customer_id: values.customer?._id }),
+            type_repair: values.type,
+            date_repair: new Date().toISOString().split("T")[0],
+            linh_kien: values.linhKienList.map((item) => ({
+              id: item._id,
+              name: item.name_linh_kien,
+              total: item.total,
+            })),
+            note: values.note,
+            staff_repair: {
+              id: userData.id,
+              name: userData.name || "",
+            },
+          };
 
-      const response = await axios.post(endpoint, payload, {
+      const response = await axios.post(endpoint, repairPayload, {
         headers: { Authorization: `Bearer ${authToken}` },
       });
 
+        // Nếu là thiết bị ngoài và type là sửa chữa, tạo đơn hàng linh kiện
+      if (values.deviceType === "Outside" && values.type === "Sửa chữa") {
+        let totalCost = 0;
+        
+        // Tính tổng giá vốn từ các linh kiện
+        values.linhKienList.forEach((item) => {
+          const linhKien = linhKienOptions.find(lk => lk._id === item._id);
+          if (linhKien) {
+            totalCost += (linhKien.price || 0) * (item?.total || 0);
+          }
+        });
+  
+        // Payload cho đơn hàng linh kiện
+        const orderPayload = {
+          chi_tiet_linh_kien: values.linhKienList.map(item => ({
+            id_linh_kien: item._id,
+            so_luong: item.total,
+            price: linhKienOptions.find(lk => lk._id === item._id)?.price || 0
+          })),
+          id_khach_hang: values.customer?._id,
+          ghi_chu: "Đơn hàng sửa chữa KH ngoài",
+          tong_tien: Number(values.tongTien || 0),
+          loi_nhuan: Number(values.tongTien || 0) - totalCost,
+          ngay_tao: new Date().toISOString()
+        };
+  
+        // Gọi API tạo đơn hàng linh kiện
+        await axios.post("/api/linhKien/order-linh-kien", orderPayload, {
+          headers: { Authorization: `Bearer ${authToken}` },
+        });
+      }
+
+    // Tạo Transaction Linh Kiện
       for (const item of values.linhKienList) {
         const transactionPayload = {
           name_linh_kien: item.name_linh_kien,
@@ -209,7 +251,7 @@ export function RepairView() {
             id: userData.id
           },
           nguoi_tao: userData.name || "",
-          noi_dung: values.note,
+          noi_dung: values.note || "",
           total: item.total,
           create_date: currentDate,
           device_type: values.deviceType === "TamTin" ? "Tâm Tín" : "Khách hàng"
@@ -469,10 +511,12 @@ export function RepairView() {
                               value={field.value}
                               onChange={(selected) => {
                                 if (selected) {
+                                  // Lấy giá trị total hiện tại
+                                  const currentTotal = form.getValues(`linhKienList.${index}.total`) || 1;
                                   form.setValue(`linhKienList.${index}`, {
                                     _id: selected._id,
                                     name_linh_kien: selected.name_linh_kien,
-                                    total: 1,
+                                    total: currentTotal, // Giữ nguyên giá trị total đã nhập
                                   });
                                 }
                               }}
@@ -530,6 +574,29 @@ export function RepairView() {
                   </div>
                 ))}
               </div>
+              {form.watch("deviceType") === "Outside" && form.watch("type") === "Sửa chữa" && (
+  <FormField
+    control={form.control}
+    name="tongTien"
+    render={({ field }) => (
+      <FormItem>
+        <FormLabel className="text-sm font-medium">Tổng tiền</FormLabel>
+        <FormControl>
+          <Input
+            {...field}
+            value={field.value ? formatCurrency(field.value) : ''} 
+            onChange={(e) => {
+              const rawValue = parseCurrency(e.target.value);
+              field.onChange(rawValue);
+            }}
+            className="bg-white"
+            placeholder="Nhập tổng tiền"
+          />
+        </FormControl>
+      </FormItem>
+    )}
+  />
+)}
 
               {/* Note Field */}
               <FormField

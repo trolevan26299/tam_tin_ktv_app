@@ -9,6 +9,7 @@ export async function POST(request: Request) {
         const transactionLinhKien = await TransactionLinhKien.create(data)
         return NextResponse.json(transactionLinhKien)
     } catch (error: any) {
+        console.log("error",error)
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
     }
 }

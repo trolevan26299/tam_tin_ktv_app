@@ -62,7 +62,7 @@ export async function POST(request: Request) {
       }
 
       // Trừ tổng số lượng linh kiện
-      linhKien.total = Number(linhKien.total || 0) - quantity
+      // linhKien.total = Number(linhKien.total || 0) - quantity bỏ trừ tổng chỉ trừ ứng
       await linhKien.save()
     }
 
