@@ -13,6 +13,7 @@ const orderLinhKienSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'customers'
   },
+  name_customer: String,
   ghi_chu: String,
   tong_tien: Number,
   loi_nhuan: Number,
